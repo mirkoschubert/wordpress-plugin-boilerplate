@@ -15,7 +15,7 @@ trait DependencyChecker
 
     // WordPress Version Check
     if (isset($dependencies['wordpress'])) {
-      $wp_version = get_bloginfo('version');
+      $wp_version = self::get_wp_version();
       $wp_check = $this->check_version_constraint($wp_version, $dependencies['wordpress']);
       if (!$wp_check['valid']) {
         $result['supported'] = false;
@@ -24,7 +24,7 @@ trait DependencyChecker
 
     // Divi Version Check (only if Divi is active)
     if (isset($dependencies['divi'])) {
-      $divi_version = function_exists('et_get_theme_version') ? et_get_theme_version() : '0.0.0';
+      $divi_version = self::get_divi_version();
       $divi_check = $this->check_version_constraint($divi_version, $dependencies['divi']);
       if (!$divi_check['valid']) {
         $result['supported'] = false;
@@ -33,7 +33,7 @@ trait DependencyChecker
 
     // Breakdance Version Check (only if Breakdance is active)
     if (isset($dependencies['breakdance'])) {
-      $breakdance_version = defined('__BREAKDANCE_VERSION') ? __BREAKDANCE_VERSION : '0.0.0';
+      $breakdance_version = self::get_breakdance_version();
       $breakdance_check = $this->check_version_constraint($breakdance_version, $dependencies['breakdance']);
       if (!$breakdance_check['valid']) {
         $result['supported'] = false;
@@ -51,6 +51,63 @@ trait DependencyChecker
 
     return $result;
   }
+
+  // =====================================================================
+  // Builder / Theme Detection
+  // =====================================================================
+
+  /**
+   * Checks if Divi Theme or Divi Builder is active
+   * @return bool
+   */
+  public static function is_divi_active(): bool
+  {
+    return \function_exists('et_get_theme_version') || \class_exists('ET_Builder_Module');
+  }
+
+  /**
+   * Returns the Divi version or '0.0.0' if not active
+   * @return string
+   */
+  public static function get_divi_version(): string
+  {
+    return \function_exists('et_get_theme_version') ? et_get_theme_version() : '0.0.0';
+  }
+
+  /**
+   * Checks if Breakdance Builder is active
+   * @return bool
+   */
+  public static function is_breakdance_active(): bool
+  {
+    return \defined('__BREAKDANCE_VERSION') || \class_exists('\\Breakdance\\Plugin');
+  }
+
+  /**
+   * Returns the Breakdance version or '0.0.0' if not active
+   * @return string
+   */
+  public static function get_breakdance_version(): string
+  {
+    return \defined('__BREAKDANCE_VERSION') ? __BREAKDANCE_VERSION : '0.0.0';
+  }
+
+  // =====================================================================
+  // WordPress Version
+  // =====================================================================
+
+  /**
+   * Returns the current WordPress version
+   * @return string
+   */
+  public static function get_wp_version(): string
+  {
+    return get_bloginfo('version');
+  }
+
+  // =====================================================================
+  // Version Constraint Checking
+  // =====================================================================
 
   /**
    * Checks version constraint with flexible operators
@@ -109,7 +166,7 @@ trait DependencyChecker
    */
   private function check_plugin_active(string $plugin, string $constraint = ''): bool
   {
-    if (!function_exists('is_plugin_active')) {
+    if (!\function_exists('is_plugin_active')) {
       include_once(ABSPATH . 'wp-admin/includes/plugin.php');
     }
 

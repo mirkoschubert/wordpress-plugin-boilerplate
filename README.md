@@ -75,6 +75,7 @@ Modules are auto-discovered from the `modules/` directory. Each module consists 
 | ---------------- | ------------------------------------------------------------ |
 | **A11y**         | Accessibility features (skip link, scroll-to-top, keyboard navigation, ARIA support) |
 | **Administration** | Admin enhancements (duplicate posts, update email control, media library, SVG/WebP/AVIF support, external links) |
+| **Local Fonts**        | Automatically localize Google Fonts                     |
 | **Login**        | Custom login page styling                                    |
 | **Pagespeed**    | Performance optimizations                                    |
 | **Privacy**      | Privacy & GDPR features                                     |

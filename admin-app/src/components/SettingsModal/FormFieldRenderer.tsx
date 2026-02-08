@@ -95,10 +95,9 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
     }
   }, [isVisible, hasDependency, skipWrapperAnimation])
 
-  // Dependency Status Check
-  const getDependencyStatus = () => {
-    if (!fieldConfig.dependency_status) return '';
-    return fieldConfig.dependency_status.supported ? '' : 'unsupported';
+  // Dependency Status Check: hide unsupported fields entirely
+  if (fieldConfig.dependency_status && !fieldConfig.dependency_status.supported) {
+    return null
   }
 
   const commonProps = {
@@ -108,8 +107,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
     onChange,
   }
 
-  const dependencyClass = getDependencyStatus()
-
   const renderField = () => {
     switch (fieldConfig.type) {
       case 'text':
@@ -117,7 +114,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
           <TextField
             {...commonProps}
             ref={innerRef}
-            className={dependencyClass}
             value={(value as string) || ''}
             onChange={onChange}
           />
@@ -128,7 +124,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
           <TextareaField
             {...commonProps}
             ref={innerRef}
-            className={dependencyClass}
             value={(value as string) || ''}
             onChange={onChange}
           />
@@ -139,7 +134,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
           <ToggleField
             {...commonProps}
             ref={innerRef}
-            className={dependencyClass}
             value={Boolean(value)}
             onChange={onChange}
             onToggle={onToggle}
@@ -151,7 +145,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
           <SelectField
             {...commonProps}
             ref={innerRef}
-            className={dependencyClass}
             value={(value as string) || ''}
             onChange={onChange}
           />
@@ -162,7 +155,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
           <MultiSelectField
             {...commonProps}
             ref={innerRef}
-            className={dependencyClass}
             value={(value as string[]) || []}
             onChange={onChange}
           />
@@ -173,7 +165,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
           <NumberField
             {...commonProps}
             ref={innerRef}
-            className={dependencyClass}
             value={(value as number) || 0}
             onChange={onChange}
           />
@@ -184,7 +175,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
           <RepeaterField
             {...commonProps}
             ref={innerRef}
-            className={dependencyClass}
             value={(value as Record<string, unknown>[]) || []}
             onChange={onChange}
           />
@@ -195,7 +185,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
           <ColorField
             {...commonProps}
             ref={innerRef}
-            className={dependencyClass}
             value={(value as string) || ''}
             onChange={onChange}
           />
@@ -206,7 +195,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
           <ImageField
             {...commonProps}
             ref={innerRef}
-            className={dependencyClass}
             value={fieldConfig.multi
               ? ((value as number[]) || [])
               : ((value as number) || 0)}
@@ -219,7 +207,6 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
           <GroupField
             {...commonProps}
             ref={innerRef}
-            className={dependencyClass}
             value={(value as Record<string, unknown>) || {}}
             onChange={onChange}
             isFirstGroup={isFirstGroup}
@@ -232,7 +219,7 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
 
       default:
         return (
-          <div className={`dvc-field ${dependencyClass}`}>
+          <div className="dvc-field">
             <p>Unsupported field type: {fieldConfig.type}</p>
           </div>
         )

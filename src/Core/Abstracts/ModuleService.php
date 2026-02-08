@@ -4,9 +4,11 @@ namespace WPPluginBoilerplate\Core\Abstracts;
 
 use WPPluginBoilerplate\Core\Interfaces\ServiceInterface;
 use WPPluginBoilerplate\Core\Config;
+use WPPluginBoilerplate\Core\Traits\DependencyChecker;
 
 abstract class ModuleService implements ServiceInterface
 {
+  use DependencyChecker;
   /**
    * Reference to the module
    * @var Module

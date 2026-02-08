@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **A11y** - Accessibility features: skip link, scroll-to-top, keyboard navigation, focus management, ARIA support, screenreader fixes, animation control, text selection colors, link underlines, slider navigation spacing
 - **Administration** - Admin enhancements: duplicate posts, disable auto-update emails, media library infinite scroll, SVG upload support (with sanitization), WebP/AVIF upload support, automatic hyphenation, external links in new tab with configurable rel attributes
+- **LocalFonts** - Automatically localize Google Fonts
 - **Login** - Custom login page styling
 - **Pagespeed** - Performance optimizations
 - **Privacy** - Privacy & GDPR features

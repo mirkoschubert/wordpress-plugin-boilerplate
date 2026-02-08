@@ -7,7 +7,7 @@ function scrollFunction(offset) {
   }
 }
 
-$('document').ready(function () {
+jQuery('document').ready(function () {
   scrollFunction(80)
   window.onscroll = function () { scrollFunction(80) }
   

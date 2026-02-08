@@ -2,6 +2,8 @@
 
 namespace WPPluginBoilerplate\Builders\Abstracts;
 
+use WPPluginBoilerplate\Core\Traits\DependencyChecker;
+
 /**
  * Abstract base class for Divi Builder custom modules.
  *
@@ -24,14 +26,7 @@ namespace WPPluginBoilerplate\Builders\Abstracts;
  */
 abstract class DiviModule
 {
-  /**
-   * Check if Divi Builder is available
-   * @return bool
-   */
-  public static function is_divi_active(): bool
-  {
-    return class_exists('ET_Builder_Module');
-  }
+  use DependencyChecker;
 
   /**
    * Register a Divi module class.

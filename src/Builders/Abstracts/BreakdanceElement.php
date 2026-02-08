@@ -2,6 +2,8 @@
 
 namespace WPPluginBoilerplate\Builders\Abstracts;
 
+use WPPluginBoilerplate\Core\Traits\DependencyChecker;
+
 /**
  * Abstract base class for Breakdance custom elements.
  *
@@ -22,14 +24,7 @@ namespace WPPluginBoilerplate\Builders\Abstracts;
  */
 abstract class BreakdanceElement
 {
-  /**
-   * Check if Breakdance is available
-   * @return bool
-   */
-  public static function is_breakdance_active(): bool
-  {
-    return defined('__BREAKDANCE_VERSION') || class_exists('\\Breakdance\\Plugin');
-  }
+  use DependencyChecker;
 
   /**
    * Register a Breakdance element class.
