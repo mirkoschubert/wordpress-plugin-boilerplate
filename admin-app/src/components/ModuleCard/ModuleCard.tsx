@@ -70,7 +70,7 @@ const ModuleCard: React.FC<ModuleCardProps> = ({
 
       </CardBody>
       <CardFooter>
-        {Object.keys(module.admin_settings).length > 1 && ( // Mehr als nur 'enabled'
+        {Object.keys(module.admin_settings).length > 0 && (
           <Button
             className="settings-btn"
             onClick={onOpenSettings}

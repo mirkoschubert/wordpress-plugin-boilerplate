@@ -31,6 +31,9 @@ class Service extends ModuleService
       });
     }
 
+    // Register custom image sizes
+    $this->register_custom_image_sizes();
+
     // Add SVG, WebP and AVIF support
     if ($this->is_option_enabled('svg_support') || $this->is_option_enabled('webp_support') || $this->is_option_enabled('avif_support')) {
       if (version_compare(get_bloginfo('version'), '5.8', '<')) {
@@ -299,5 +302,35 @@ class Service extends ModuleService
     })();
     </script>
     <?php
+  }
+
+  /**
+   * Register custom image sizes from admin settings
+   * @return void
+   * @since 1.1.0
+   */
+  private function register_custom_image_sizes(): void
+  {
+    $custom_sizes = $this->get_module_option('custom_image_sizes', []);
+
+    if (empty($custom_sizes) || !is_array($custom_sizes)) {
+      return;
+    }
+
+    foreach ($custom_sizes as $size) {
+      // Validate required fields
+      if (empty($size['name']) || !isset($size['width']) || !isset($size['height'])) {
+        continue;
+      }
+
+      // Sanitize values
+      $name = sanitize_title($size['name']);
+      $width = absint($size['width']);
+      $height = absint($size['height']);
+      $crop = !empty($size['crop']);
+
+      // Register the image size
+      add_image_size($name, $width, $height, $crop);
+    }
   }
 }

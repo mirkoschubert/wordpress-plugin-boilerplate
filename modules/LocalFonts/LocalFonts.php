@@ -25,6 +25,7 @@ final class LocalFonts extends Module
   protected $default_options = [
     'enabled' => true,
     'disable_google_fonts' => true,
+    'enable_gutenberg_fonts' => false,
     'selected_fonts' => [],
     'font_display' => 'swap'
   ];
@@ -54,12 +55,15 @@ final class LocalFonts extends Module
     return [
       'disable_google_fonts' => [
         'type' => 'toggle',
-        'label' => __('Disable Divi Google Fonts', 'wp-plugin-boilerplate'),
-        'description' => __('Automatically disable all Google Fonts loading in Divi theme and builder. Requires Divi.', 'wp-plugin-boilerplate'),
+        'label' => __('Disable Google Fonts Globally', 'wp-plugin-boilerplate'),
+        'description' => __('Automatically disable all Google Fonts loading. Works with Divi, Oxygen, and other themes/plugins that use Google Fonts.', 'wp-plugin-boilerplate'),
         'default' => $this->default_options['disable_google_fonts'],
-        'dependencies' => [
-          'divi' => '>= 4.0',
-        ],
+      ],
+      'enable_gutenberg_fonts' => [
+        'type' => 'toggle',
+        'label' => __('Enable Fonts in Gutenberg Editor', 'wp-plugin-boilerplate'),
+        'description' => __('Register local fonts in the Gutenberg (Block) editor font picker.', 'wp-plugin-boilerplate'),
+        'default' => false,
       ],
       'selected_fonts' => [
         'type' => 'multi_select',

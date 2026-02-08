@@ -1,0 +1,350 @@
+/**
+ * FileManager Frontend Styles
+ *
+ * @package WPPluginBoilerplate
+ * @since 1.1.0
+ */
+
+/* Container */
+.wpbp-filemanager {
+    max-width: 1200px;
+    margin: 2em auto;
+    padding: 0 1em;
+}
+
+/* Header */
+.wpbp-filemanager__header h3 {
+    margin: 0 0 0.5em;
+    font-size: 1.5em;
+}
+
+.wpbp-filemanager__description {
+    color: #666;
+    margin: 0 0 1.5em;
+}
+
+/* Upload Section */
+.wpbp-filemanager__upload {
+    margin-bottom: 2em;
+}
+
+.wpbp-filemanager__upload-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.wpbp-filemanager__upload-form {
+    margin-top: 1em;
+    padding: 1.5em;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Form Fields */
+.wpbp-form-field {
+    margin-bottom: 1.5em;
+}
+
+.wpbp-form-field label {
+    display: block;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+.wpbp-form-field input[type="text"],
+.wpbp-form-field input[type="file"],
+.wpbp-form-field textarea,
+.wpbp-form-field select {
+    width: 100%;
+    max-width: 500px;
+    padding: 0.5em;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.wpbp-form-help {
+    margin: 0.5em 0 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.wpbp-form-actions {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+}
+
+/* Upload Progress */
+.wpbp-upload-progress {
+    margin-top: 1em;
+}
+
+.wpbp-upload-progress__bar {
+    height: 20px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.5em;
+}
+
+.wpbp-upload-progress__fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0073aa 0%, #005177 100%);
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+.wpbp-upload-progress__text {
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Files List */
+.wpbp-filemanager__loading,
+.wpbp-filemanager__empty {
+    text-align: center;
+    padding: 3em 1em;
+    color: #666;
+}
+
+.wpbp-filemanager__loading .dashicons,
+.wpbp-filemanager__empty .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1em;
+    opacity: 0.5;
+}
+
+.wpbp-spin {
+    animation: wpbp-spin 1s linear infinite;
+}
+
+@keyframes wpbp-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Table */
+.wpbp-filemanager__table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.wpbp-filemanager__table thead {
+    background: #f5f5f5;
+}
+
+.wpbp-filemanager__table th,
+.wpbp-filemanager__table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.wpbp-filemanager__table th {
+    font-weight: 600;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    color: #666;
+}
+
+.wpbp-filemanager__table tbody tr:hover {
+    background: #f9f9f9;
+}
+
+.wpbp-filemanager__table td .dashicons {
+    margin-right: 0.5em;
+    color: #0073aa;
+}
+
+.wpbp-filemanager__actions-col {
+    width: 150px;
+    text-align: right;
+}
+
+.wpbp-filemanager__actions {
+    display: flex;
+    gap: 0.25em;
+    justify-content: flex-end;
+}
+
+.wpbp-filemanager__actions .button {
+    padding: 4px 8px;
+    min-height: 0;
+    line-height: 1;
+}
+
+.wpbp-button-danger {
+    color: #dc3232;
+}
+
+.wpbp-button-danger:hover {
+    color: #fff;
+    background: #dc3232;
+    border-color: #dc3232;
+}
+
+/* Modal */
+.wpbp-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wpbp-modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+.wpbp-modal__content {
+    position: relative;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+.wpbp-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1em 1.5em;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.wpbp-modal__header h3 {
+    margin: 0;
+}
+
+.wpbp-modal__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 24px;
+    line-height: 1;
+    color: #666;
+}
+
+.wpbp-modal__close:hover {
+    color: #000;
+}
+
+.wpbp-modal__body {
+    padding: 1.5em;
+}
+
+.wpbp-modal__actions {
+    display: flex;
+    gap: 0.5em;
+    margin-top: 1.5em;
+    padding-top: 1.5em;
+    border-top: 1px solid #e5e5e5;
+}
+
+/* File Info */
+.wpbp-file-info {
+    background: #f9f9f9;
+    padding: 1em;
+    border-radius: 4px;
+    margin-top: 1em;
+}
+
+.wpbp-file-info p {
+    margin: 0.5em 0;
+    font-size: 0.9em;
+}
+
+.wpbp-file-info strong {
+    display: inline-block;
+    min-width: 100px;
+}
+
+/* Notices */
+.wpbp-notice {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    margin-bottom: 1em;
+    border-radius: 4px;
+    border-left: 4px solid;
+}
+
+.wpbp-notice--success {
+    background: #f0f9ff;
+    border-color: #0073aa;
+    color: #005177;
+}
+
+.wpbp-notice--error {
+    background: #fef7f7;
+    border-color: #dc3232;
+    color: #a00;
+}
+
+.wpbp-notice--info {
+    background: #f9f9f9;
+    border-color: #72777c;
+    color: #444;
+}
+
+.wpbp-notice__message {
+    flex: 1;
+}
+
+.wpbp-notice__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 1em;
+    line-height: 1;
+}
+
+.wpbp-notice__close:hover {
+    opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .wpbp-filemanager__table {
+        font-size: 0.9em;
+    }
+
+    .wpbp-filemanager__table th,
+    .wpbp-filemanager__table td {
+        padding: 8px;
+    }
+
+    .wpbp-modal__content {
+        width: 95%;
+    }
+
+    .wpbp-filemanager__actions {
+        flex-direction: column;
+    }
+}

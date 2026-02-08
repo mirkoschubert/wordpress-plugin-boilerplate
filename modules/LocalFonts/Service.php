@@ -13,19 +13,32 @@ class Service extends ModuleService
    */
   public function init_service()
   {
-    // === Divi-specific: Disable Google Fonts ===
-    if (self::is_divi_active() && $this->is_option_enabled('disable_google_fonts')) {
-      add_filter('et_builder_google_fonts_is_enabled', '__return_false');
-      add_filter('et_builder_google_fonts', '__return_empty_array', 999);
+    $installed_fonts = get_option('wp_plugin_boilerplate_installed_fonts', []);
 
-      add_action('wp_enqueue_scripts', [$this, 'dequeue_google_fonts'], 100);
-      add_action('wp_footer', [$this, 'dequeue_google_fonts'], 1);
+    // === Disable Google Fonts Globally ===
+    if ($this->is_option_enabled('disable_google_fonts')) {
+      // Divi
+      if (self::is_divi_active()) {
+        add_filter('et_builder_google_fonts_is_enabled', '__return_false');
+        add_filter('et_builder_google_fonts', '__return_empty_array', 999);
+        add_action('wp_enqueue_scripts', [$this, 'dequeue_google_fonts'], 100);
+        add_action('wp_footer', [$this, 'dequeue_google_fonts'], 1);
+      }
+
+      // Global Google Fonts blocking (all themes/plugins)
+      add_action('wp_enqueue_scripts', [$this, 'block_google_fonts'], 999);
+      add_action('wp_head', [$this, 'block_google_fonts_preconnect'], 1);
     }
 
     // === Divi-specific: Register local fonts as websafe fonts ===
-    $installed_fonts = get_option('wp_plugin_boilerplate_installed_fonts', []);
     if (self::is_divi_active() && !empty($installed_fonts)) {
       add_filter('et_websafe_fonts', [$this, 'register_local_fonts_websafe'], 999, 1);
+    }
+
+    // === Gutenberg: Register local fonts in block editor ===
+    if ($this->is_option_enabled('enable_gutenberg_fonts') && !empty($installed_fonts)) {
+      add_action('after_setup_theme', [$this, 'register_gutenberg_fonts']);
+      add_action('enqueue_block_editor_assets', [$this, 'enqueue_gutenberg_font_assets']);
     }
 
     // === Common: Auto-update system ===
@@ -364,6 +377,127 @@ class Service extends ModuleService
     foreach ($actual_files as $file) {
       if (!\in_array($file, $expected_files)) {
         \unlink($fonts_dir . '/' . $file);
+      }
+    }
+  }
+
+
+  // =====================================================================
+  // Global Google Fonts Blocking
+  // =====================================================================
+
+  /**
+   * Blocks Google Fonts from being loaded by any theme or plugin
+   * @return void
+   * @since 1.1.0
+   */
+  public function block_google_fonts()
+  {
+    global $wp_styles;
+
+    if (!is_object($wp_styles)) {
+      return;
+    }
+
+    foreach ($wp_styles->registered as $handle => $style) {
+      if (strpos($style->src, 'fonts.googleapis.com') !== false || strpos($style->src, 'fonts.gstatic.com') !== false) {
+        wp_dequeue_style($handle);
+        wp_deregister_style($handle);
+      }
+    }
+  }
+
+  /**
+   * Removes Google Fonts preconnect links from head
+   * @return void
+   * @since 1.1.0
+   */
+  public function block_google_fonts_preconnect()
+  {
+    ob_start(function ($html) {
+      // Remove Google Fonts preconnect/prefetch/dns-prefetch links
+      $html = preg_replace('/<link[^>]*?(fonts\.googleapis\.com|fonts\.gstatic\.com)[^>]*?>/i', '', $html);
+      return $html;
+    });
+  }
+
+
+  // =====================================================================
+  // Gutenberg Editor Integration
+  // =====================================================================
+
+  /**
+   * Registers local fonts as theme support for Gutenberg editor
+   * @return void
+   * @since 1.1.0
+   */
+  public function register_gutenberg_fonts()
+  {
+    $installed_fonts = get_option('wp_plugin_boilerplate_installed_fonts', []);
+
+    if (empty($installed_fonts)) {
+      return;
+    }
+
+    $font_families = [];
+
+    foreach ($installed_fonts as $font_family => $font_data) {
+      $metadata = $font_data['metadata'] ?? [];
+      $category = $metadata['category'] ?? 'sans-serif';
+
+      $font_families[] = [
+        'fontFamily' => '"' . $font_family . '", ' . $category,
+        'name' => $font_family,
+        'slug' => sanitize_title($font_family),
+      ];
+    }
+
+    // Register font families for Gutenberg
+    add_theme_support('editor-font-sizes', []);
+
+    // Add custom fonts via theme.json API if available (WordPress 5.9+)
+    if (function_exists('wp_get_global_settings')) {
+      add_filter('wp_theme_json_data_default', function ($theme_json) use ($font_families) {
+        $data = $theme_json->get_data();
+
+        if (!isset($data['settings']['typography']['fontFamilies'])) {
+          $data['settings']['typography']['fontFamilies'] = [];
+        }
+
+        $data['settings']['typography']['fontFamilies'] = array_merge(
+          $data['settings']['typography']['fontFamilies'],
+          $font_families
+        );
+
+        return new \WP_Theme_JSON_Data($data, 'default');
+      });
+    }
+  }
+
+  /**
+   * Enqueues local font CSS in Gutenberg editor
+   * @return void
+   * @since 1.1.0
+   */
+  public function enqueue_gutenberg_font_assets()
+  {
+    $upload_dir = wp_upload_dir();
+    $fonts_dir = $upload_dir['basedir'] . '/local-fonts';
+    $fonts_url = $upload_dir['baseurl'] . '/local-fonts';
+    $installed_fonts = get_option('wp_plugin_boilerplate_installed_fonts', []);
+
+    foreach ($installed_fonts as $font_family => $font_data) {
+      $css_filename = sanitize_title($font_family) . '.css';
+      $css_path = $fonts_dir . '/' . $css_filename;
+      $css_url = $fonts_url . '/' . $css_filename;
+
+      if (\file_exists($css_path)) {
+        wp_enqueue_style(
+          'wp-plugin-boilerplate-editor-font-' . sanitize_title($font_family),
+          $css_url,
+          [],
+          \filemtime($css_path)
+        );
       }
     }
   }

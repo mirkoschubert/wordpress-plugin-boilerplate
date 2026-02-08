@@ -10,6 +10,7 @@ import {
   GroupField,
   ImageField,
 } from '../FormFields'
+import PageSelectField from '../FormFields/PageSelectField'
 import type { FieldConfig } from '@/types'
 import { useMemo, useEffect, useRef } from 'react'
 
@@ -156,6 +157,16 @@ export const FormFieldRenderer: React.FC<FormFieldRendererProps> = ({
             {...commonProps}
             ref={innerRef}
             value={(value as string[]) || []}
+            onChange={onChange}
+          />
+        )
+
+      case 'page_select':
+        return (
+          <PageSelectField
+            {...commonProps}
+            ref={innerRef}
+            value={(value as number) || 0}
             onChange={onChange}
           />
         )

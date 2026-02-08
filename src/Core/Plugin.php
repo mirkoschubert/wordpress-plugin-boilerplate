@@ -25,6 +25,9 @@ final class Plugin
     $this->config = Config::get_instance();
     $this->options = $this->config->get_options();
 
+    // Load global helper functions
+    require_once \WP_PLUGIN_BOILERPLATE_DIR . 'src/Core/helpers.php';
+
     $this->migration = new Migration();
     $this->migration->run();
 

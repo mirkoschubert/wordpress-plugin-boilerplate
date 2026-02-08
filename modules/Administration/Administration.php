@@ -32,6 +32,7 @@ final class Administration extends Module
     'svg_support' => false,
     'webp_support' => false,
     'avif_support' => false,
+    'custom_image_sizes' => [],
     'hyphens' => false,
     'external_links_new_tab' => false,
     'external_links_rel' => 'noopener noreferrer nofollow',
@@ -101,6 +102,48 @@ final class Administration extends Module
             'dependencies' => [
               'wordpress' => '< 6.5',
             ]
+          ],
+        ]
+      ],
+      'image_sizes_group' => [
+        'type' => 'group',
+        'title' => __('Custom Image Sizes', 'wp-plugin-boilerplate'),
+        'description' => __('Register additional image sizes for WordPress', 'wp-plugin-boilerplate'),
+        'fields' => [
+          'custom_image_sizes' => [
+            'type' => 'repeater',
+            'label' => __('Image Sizes', 'wp-plugin-boilerplate'),
+            'description' => __('Define custom image sizes that WordPress will generate when uploading images.', 'wp-plugin-boilerplate'),
+            'default' => $this->default_options['custom_image_sizes'],
+            'fields' => [
+              [
+                'id' => 'name',
+                'type' => 'text',
+                'label' => __('Name', 'wp-plugin-boilerplate'),
+                'description' => __('Unique identifier (lowercase, underscores allowed).', 'wp-plugin-boilerplate'),
+              ],
+              [
+                'id' => 'width',
+                'type' => 'number',
+                'label' => __('Width', 'wp-plugin-boilerplate'),
+                'description' => __('Maximum width in pixels', 'wp-plugin-boilerplate'),
+                'min' => 0,
+              ],
+              [
+                'id' => 'height',
+                'type' => 'number',
+                'label' => __('Height', 'wp-plugin-boilerplate'),
+                'description' => __('Maximum height in pixels', 'wp-plugin-boilerplate'),
+                'min' => 0,
+              ],
+              [
+                'id' => 'crop',
+                'type' => 'toggle',
+                'label' => __('Crop to exact dimensions', 'wp-plugin-boilerplate'),
+                'description' => __('If enabled, image will be cropped to exact size. If disabled, image will be scaled proportionally.', 'wp-plugin-boilerplate'),
+                'default' => false,
+              ],
+            ],
           ],
         ]
       ],

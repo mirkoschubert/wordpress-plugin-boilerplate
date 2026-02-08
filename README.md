@@ -48,9 +48,10 @@ src/
     Plugin.php                # Bootstrapper
     Config.php                # Singleton configuration
     Migration.php             # Version migrations
+    helpers.php               # Global utility functions
     Abstracts/                # Module & ModuleService base classes
     Interfaces/               # ModuleInterface, ServiceInterface
-    Traits/                   # DependencyChecker
+    Traits/                   # DependencyChecker, AjaxHandler
   Admin/
     Admin.php                 # Settings page (under Settings menu)
   API/
@@ -63,6 +64,7 @@ src/
       BreakdanceElement.php   # Abstract base for Breakdance elements
     Divi/                     # Divi custom modules
     Breakdance/               # Breakdance custom elements
+      PostLoopTabs/           # Example: Post Loop Tabs element
 modules/                      # Auto-discovered feature modules
 admin-app/                    # React 18 + TypeScript admin interface
 ```
@@ -74,8 +76,10 @@ Modules are auto-discovered from the `modules/` directory. Each module consists 
 | Module           | Description                                                  |
 | ---------------- | ------------------------------------------------------------ |
 | **A11y**         | Accessibility features (skip link, scroll-to-top, keyboard navigation, ARIA support) |
-| **Administration** | Admin enhancements (duplicate posts, update email control, media library, SVG/WebP/AVIF support, external links) |
-| **Local Fonts**        | Automatically localize Google Fonts                     |
+| **Administration** | Admin enhancements (duplicate posts, update email control, media library, SVG/WebP/AVIF support, external links, custom image sizes) |
+| **CustomPostTypes** | Example CPT module with Jobs implementation, ACF fields, and taxonomies |
+| **FileManager**  | File upload/download management with permission-based access control and frontend shortcode |
+| **LocalFonts**   | Local Google Fonts with auto-updates, Gutenberg integration, and global Google Fonts blocking |
 | **Login**        | Custom login page styling                                    |
 | **Pagespeed**    | Performance optimizations                                    |
 | **Privacy**      | Privacy & GDPR features                                     |
@@ -99,6 +103,26 @@ Abstract base classes are provided for Divi and Breakdance page builder integrat
 - **Breakdance**: Extend `src/Builders/Abstracts/BreakdanceElement.php`, place elements in `src/Builders/Breakdance/`
 
 Builder modules are only loaded when the respective page builder is active.
+
+**Included Breakdance Elements:**
+- **PostLoopTabs**: Tabbed post loop with query builder and global block integration
+
+### Global Utilities
+
+**Helper Functions** (`src/Core/helpers.php`):
+- `wpbp_format_bytes()` - Format byte size to human-readable
+- `wpbp_mime_to_extension()` - Convert MIME type to file extension
+- `wpbp_get_plugin_option()` / `wpbp_update_plugin_option()` - Plugin option getters/setters
+- `wpbp_is_module_enabled()` - Check if module is active
+- `wpbp_sanitize_slug()` - Sanitize strings to slugs
+- `wpbp_get_file_icon_class()` - Get Dashicon class for file types
+- `wpbp_array_get()` - Safe array key access
+
+**AJAX Handler Trait** (`src/Core/Traits/AjaxHandler.php`):
+- Standardized AJAX request verification (nonce + capabilities)
+- JSON response helpers
+- Input sanitization
+- Error logging
 
 ## Development
 
