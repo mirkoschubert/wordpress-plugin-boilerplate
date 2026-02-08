@@ -1,0 +1,95 @@
+@import '../../styles/variables'
+@import '../../styles/mixins'
+
+.dvc-settings-modal
+  wp-modal-style()
+
+  .components-modal__content
+    box-shadow none !important
+    border 1px solid $border-color
+    border-radius $border-radius
+    width 100% !important
+    max-width 600px !important
+    height auto !important
+    max-height 90vh !important
+    padding 0
+    
+  .components-modal__header
+    padding $spacing-md $spacing-lg $spacing-base
+    
+    .components-modal__header-heading
+      font-size 18px
+      font-weight 600
+      color $admin-dark-gray
+      margin 0
+      
+  .components-modal__content .components-modal__content
+    padding 0 !important
+    
+  .dvc-form
+    overflow hidden
+    position relative
+    z-index 1
+    
+  .dvc-loading
+    display flex
+    flex-direction column
+    align-items center
+    justify-content center
+    padding $spacing-xxl $spacing-lg
+    
+    p
+      margin-top 16px
+      color $admin-gray
+      font-size 14px
+      
+  // Footer mit Buttons
+  .dvc-modal-footer
+    display flex
+    justify-content flex-end
+    gap 12px
+    padding $spacing-base $spacing-lg
+    border-top 1px solid #e0e0e0
+    background $admin-light-gray
+    position relative
+    z-index 0
+    
+    .components-button
+      min-height 36px
+      
+    .components-button.is-primary
+      background $theme-color-primary
+      border-color $theme-color-primary
+      
+      &:hover:not(:disabled)
+        background $theme-color-primary-light
+        border-color $theme-color-primary-light
+        
+    .components-button.is-tertiary
+      color $admin-gray
+      
+      &:hover:not(:disabled)
+        color $admin-dark-gray
+        
+  // Responsive
+  @media (max-width 782px)
+    .components-modal__content
+      width 95% !important
+      max-width 95% !important
+      margin $spacing-md auto !important
+      
+    .dvc-form
+      > .dvc-fieldnot(.group-field)first-child
+        margin-top $spacing-base
+        
+      > .dvc-fieldnot(.group-field)last-child
+        margin-bottom $spacing-base
+      
+    .dvc-modal-footer
+      padding 12px $spacing-base
+      flex-direction column-reverse
+      gap 8px
+      
+      .components-button
+        width 100%
+        justify-content center

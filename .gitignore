@@ -1,0 +1,12 @@
+.DS_Store
+.synchronize
+docs
+push.sh
+release.sh
+.pushrc
+rsync.log
+dist/
+/vendor/
+node_modules
+.claude
+

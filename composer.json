@@ -1,0 +1,22 @@
+{
+  "name": "mirkoschubert/wp-plugin-boilerplate",
+  "description": "WordPress Feature Plugin Boilerplate for client projects.",
+  "type": "wordpress-plugin",
+  "require": {
+    "php": "^8.0",
+    "enshrined/svg-sanitize": "^0.22.0"
+  },
+  "license": "GPL-3.0",
+  "autoload": {
+    "psr-4": {
+      "WPPluginBoilerplate\\": "src/",
+      "WPPluginBoilerplate\\Modules\\": "modules/"
+    }
+  },
+  "authors": [
+    {
+      "name": "mirkoschubert",
+      "email": "office@mirkoschubert.de"
+    }
+  ]
+}

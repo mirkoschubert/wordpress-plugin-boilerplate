@@ -1,0 +1,454 @@
+@import '../../styles/variables'
+@import '../../styles/mixins'
+
+// Wrapper für abhängige Felder (Clip-Animation wie GroupField)
+.dvc-dependency-wrapper
+  overflow hidden
+  transition height 0.3s ease-in-out
+  will-change height
+
+  > .dvc-field
+    border-top 1px solid $admin-border !important
+
+.dvc-field
+  wordpress-field()
+
+  .dvc-field-header
+    margin-bottom $spacing-base
+    
+  .dvc-field-label
+    font-size $font-size-base
+    font-weight 500
+    color $admin-dark-gray
+    margin-top 0
+    margin-bottom $spacing-xs
+    
+  .dvc-field-description
+    margin 0
+    color $admin-gray
+    font-size $font-size-base
+    font-style italic
+  
+  // Group fields use different spacing
+  &.group-field
+    wordpress-field-grouped()
+  
+  // Dependency Status Styling
+  &.unsupported
+    opacity 0.5
+    pointer-events none
+  
+  // WordPress Components Integration
+  .components-base-control,
+  .components-toggle-control
+    margin 0
+    width 100%
+    
+    &__label
+      font-weight 500
+      color $admin-dark-gray
+      font-size $font-size-base
+      text-transform none
+    
+    &__help
+      color $admin-gray
+      font-size $font-size-base
+      font-style italic
+      margin-top 0
+
+
+// Toggle Field
+.toggle-field
+  .components-form-toggle
+    width 42px
+    height 22px
+
+    &.is-checked
+      .components-form-toggle__track
+        background-color $theme-color-primary
+
+      .components-form-toggle__thumb
+        transform translateX(20px)
+
+    .components-form-toggle__input:focus+.components-form-toggle__track
+      box-shadow none
+
+    .components-form-toggle__track
+      width 42px
+      height 22px
+      border-radius 11px
+
+    .components-form-toggle__thumb
+      width 18px
+      height 18px
+
+  .components-toggle-control
+    .components-h-stack
+      flex-direction row-reverse  
+
+    .components-toggle-control__help
+      margin-left 0
+
+
+// Select Field (CustomSelectControl)
+/* .select-field
+  position relative
+  z-index 1
+
+  .components-custom-select-control__menu
+    position absolute
+    left 0
+    width 100%
+    background white
+    border 1px solid $admin-dark-gray
+    border-radius 2px
+    box-shadow 0 4px 8px rgba(0, 0, 0, 0.1)
+    z-index $z-tooltip
+    max-height 200px
+    overflow-y auto
+
+  .components-custom-select-control__item
+    &[aria-selected="true"],
+    &[data-highlighted]
+      background $theme-color-primary
+      color white
+
+  // Dropdown nach unten (Standard)
+  &.dropdown-down .components-custom-select-control__menu
+    top 100%
+    box-shadow 0 4px 8px rgba(0, 0, 0, 0.1)
+
+  // Dropdown nach oben
+  &.dropdown-up .components-custom-select-control__menu
+    bottom 100%
+    top auto
+    box-shadow 0 -4px 8px rgba(0, 0, 0, 0.1) */
+
+
+// MultiSelect Field
+/* .multi-select-field
+  position relative
+  z-index 1
+
+  .components-form-token-field__input-container
+    position relative
+
+  .components-form-token-field__suggestions-list
+    position absolute
+    left 0
+    width 100%
+    background white
+    border 1px solid $admin-dark-gray
+    border-radius 2px
+    box-shadow 0 4px 8px rgba(0, 0, 0, 0.1)
+    z-index $z-tooltip
+    max-height 200px
+    overflow-y auto
+
+  .components-form-token-field__suggestion
+    padding 8px 12px
+
+    &.is-selected
+      background $theme-color-primary
+      color white
+
+  // Dropdown nach unten öffnen (Standard)
+  &.dropdown-down .components-form-token-field__suggestions-list
+    top 100%
+    box-shadow 0 4px 8px rgba(0, 0, 0, 0.1)
+
+  // Dropdown nach oben öffnen
+  &.dropdown-up .components-form-token-field__suggestions-list
+    bottom 100%
+    top auto
+    box-shadow 0 -4px 8px rgba(0, 0, 0, 0.1) */
+
+
+// Color Field
+.color-field
+  .color-field-layout
+    margin 0
+    display flex
+    align-items center
+    justify-content space-between
+    gap 1rem
+    
+  .color-field-info
+    flex 1
+    
+    .color-field-label
+      display block
+      font-weight 600
+      color #333
+      margin-bottom 4px
+      
+    .color-field-description
+      margin 0
+      color #666
+      font-size 13px
+      font-style italic
+      line-height 1.4
+      
+  .color-field-control
+    flex-shrink 0
+    
+    .color-indicator-wrapper
+      cursor pointer
+      display inline-block
+      padding 4px
+      border-radius 50%
+      transition all 0.2s ease
+      
+      &:hover
+        background-color #f0f0f0
+        transform scale(1.05)
+        
+      .components-color-indicator
+        width 32px
+        height 32px
+        border-radius 50%
+        border 2px solid #ddd
+        box-shadow 0 2px 4px rgba(0,0,0,0.1)
+        transition all 0.2s ease
+        
+        &:hover
+          border-color #007cba
+          box-shadow 0 2px 8px rgba(0,124,186,0.2)
+
+
+// Color Picker Popover Styles  
+.color-field-popover
+  z-index 1000000 !important
+  
+  .color-field-picker
+    padding 12px
+    background white
+    border-radius 6px
+    box-shadow 0 8px 24px rgba(0,0,0,0.15)
+    min-width 260px
+    
+    // WordPress ColorPicker component styles
+    .components-color-picker
+      width 100% !important
+      
+      .components-color-picker__saturation
+        margin-bottom 12px
+        
+      .components-color-picker__hue
+        margin-bottom 12px
+
+
+// Group Field
+.group-field
+  border-top 1px solid $admin-border
+  margin-bottom 0
+  padding 0
+  overflow hidden
+  background white
+
+  &:first-child
+    border-top none
+  
+  .group-field-header
+    padding $spacing-base $spacing-md
+    background $admin-light-gray
+    border-bottom 1px solid $admin-border
+    cursor pointer
+    display flex
+    align-items center
+    justify-content space-between
+    transition all 0.2s ease
+    
+    &:hover
+      background #f0f2f5
+      
+    .group-field-info
+      flex 1
+      
+      .group-field-title
+        margin 0 0 4px 0
+        font-size $font-size-lg
+        font-weight 500
+        color $admin-dark-gray
+        line-height 1.3
+        
+      .group-field-description
+        margin 0
+        font-size $font-size-base
+        color $admin-gray
+        line-height 1.4
+        font-style italic
+        
+    .group-field-toggle
+      flex-shrink 0
+      margin-left $spacing-base
+      color $admin-gray
+      transition transform 0.2s ease
+      display flex
+      align-items center
+      justify-content center
+      width 2rem
+      height 2rem
+      
+      svg
+        width 1.5rem
+        height 1.5rem
+      
+  .group-field-content
+    overflow hidden
+    transition height 0.3s ease-in-out
+    height 0
+    
+  .group-field-fields
+    overflow hidden
+    
+    .dvc-field
+      //margin-bottom $spacing-md
+      
+      &:last-child
+        margin-bottom 0
+        
+  // Collapsed State
+  &.collapsed
+    .group-field-header
+      border-bottom none
+      
+    .group-field-toggle
+      transform rotate(0deg)
+      
+  // Expanded State  
+  &.expanded
+    .group-field-toggle
+      transform rotate(0deg)
+
+
+// Repeater Field
+.repeater-field
+  max-height none !important
+
+  .repeater-field-wrapper
+    margin 0
+
+    .repeater-items
+      margin-bottom $spacing-base
+    
+    .repeater-item
+      margin-bottom $spacing-sm
+      border-radius $border-radius
+      overflow hidden
+      
+      &.expanded
+        .repeater-item-header
+          /* border-bottom 1px solid $admin-border */
+          
+      &.collapsed
+        .repeater-item-header
+          border-bottom none
+          cursor pointer
+
+    .repeater-item-header
+      padding .75rem 1rem !important
+      background $admin-light-gray
+      cursor pointer
+      
+      .repeater-item-toggle
+        flex 1
+      
+      .expand-toggle
+        padding 0 !important
+        background none !important
+        border none !important
+        box-shadow none !important
+        text-align left
+        width 100%
+        justify-content flex-start
+        pointer-events none
+        
+        &:hover
+          background none !important
+          
+        .expand-icon
+          display inline-block
+          width 1rem
+          height 1rem
+          margin-right 8px
+          font-size 12px
+          line-height 1rem
+          text-align center
+          color $admin-gray
+          transition transform 0.2s ease
+          
+        .item-label
+          color $admin-dark-gray
+          font-weight 500
+    
+    .repeater-item-content
+      padding 0 !important
+
+    .repeater-fields
+      padding 0
+
+    .repeater-empty
+      text-align center
+      padding $spacing-xxl $spacing-md
+      background $admin-light-gray
+      border 2px dashed $admin-border
+      border-radius $border-radius
+      color $admin-gray
+      
+      p
+        margin 0
+        font-style italic
+        
+    .add-repeater-item
+      width 100%
+      justify-content center
+      margin-bottom: $spacing-xs
+
+
+// Image Field
+.image-field
+  .image-field-header
+    display flex
+    align-items flex-start
+    justify-content space-between
+    gap $spacing-base
+
+    .image-field-info
+      flex 1
+
+  .image-field-preview
+    margin-top $spacing-base
+    display grid
+    grid-template-columns repeat(auto-fill, minmax(80px, 80px))
+    gap $spacing-sm
+
+    .image-field-item
+      position relative
+      width 80px
+      height 80px
+
+      img
+        width 100%
+        height 100%
+        object-fit cover
+        border-radius $border-radius
+        display block
+
+      .image-field-remove
+        position absolute
+        top -6px
+        right -6px
+        width 20px !important
+        height 20px !important
+        min-width 20px !important
+        padding 0 !important
+        border-radius 50%
+        background white
+        border 1px solid $admin-border
+        box-shadow 0 1px 3px rgba(0, 0, 0, 0.1)
+
+        &:hover
+          border-color $wp-error
+          color $wp-error
+

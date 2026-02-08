@@ -1,0 +1,252 @@
+<?php
+
+namespace WPPluginBoilerplate\Core;
+
+use WPPluginBoilerplate\Core\Abstracts\Module;
+
+final class Config
+{
+  private static $instance = null;
+
+  public $plugin_name = '';
+  public $plugin_version = '';
+  public $plugin_slug = '';
+  public $plugin_dir = '';
+  public $plugin_url = '';
+  protected $options;
+
+  public static function get_instance(): self
+  {
+    if (self::$instance === null) {
+      self::$instance = new self();
+    }
+    return self::$instance;
+  }
+
+  public function __construct()
+  {
+    $this->plugin_name = 'WP Plugin Boilerplate';
+    $this->plugin_version = WP_PLUGIN_BOILERPLATE_VERSION;
+    $this->plugin_slug = 'wp-plugin-boilerplate';
+    $this->plugin_dir = WP_PLUGIN_BOILERPLATE_DIR;
+    $this->plugin_url = WP_PLUGIN_BOILERPLATE_URL;
+
+    $this->options = get_option('wp_plugin_boilerplate_options');
+  }
+
+  /**
+   * Gets all plugin options
+   * @return array|false
+   * @since 1.0.0
+   */
+  public function get_options()
+  {
+    $options = get_option('wp_plugin_boilerplate_options');
+    return $options ?? [];
+  }
+
+  /**
+   * Gets all module options
+   * @param string $module_slug
+   * @return array
+   * @since 1.0.0
+   */
+  public function get_module_options($module_slug)
+  {
+    if (!isset($this->options[$module_slug])) {
+      if (\defined('WP_DEBUG') && WP_DEBUG) {
+        error_log("WPPluginBoilerplate: No options found for module '{$module_slug}'.");
+      }
+      return [];
+    }
+
+    return $this->options[$module_slug] ?: [];
+  }
+
+  /**
+   * Saves module options
+   * @param string $module_slug
+   * @param array $options
+   * @return bool
+   * @since 1.0.0
+   */
+  public function save_module_options($module_slug, $options)
+  {
+    if (empty($this->options)) {
+        $this->options = $this->get_options();
+    }
+
+    $old_options = $this->options[$module_slug] ?? [];
+    $has_changes = $old_options != $options;
+
+    if ($has_changes) {
+        $this->options[$module_slug] = $options;
+
+        do_action('wp_plugin_boilerplate_module_options_saving_' . $module_slug, $options, $old_options);
+
+        $result = update_option('wp_plugin_boilerplate_options', $this->options);
+
+        if ($result) {
+            do_action('wp_plugin_boilerplate_module_options_saved_' . $module_slug, $options, $old_options);
+        }
+
+        return $result;
+    } else {
+        if (\defined('WP_DEBUG') && WP_DEBUG) {
+            error_log("WPPluginBoilerplate: No changes detected for module options - hook not fired.");
+        }
+    }
+
+    return true;
+  }
+
+  /**
+   * Gets a specific module option
+   * @param string $module
+   * @param string $id
+   * @return mixed|false
+   * @since 1.0.0
+   */
+  public function get_option($module, $id)
+  {
+    if (empty($this->options)) {
+      $this->options = $this->get_options();
+    }
+    return $this->options[$module][$id] ?? [];
+  }
+
+  /**
+   * Sets a specific module option
+   * @param string $module
+   * @param string $key
+   * @param mixed $value
+   * @return bool
+   * @since 1.0.0
+   */
+  public function set_option($module, $key, $value): bool
+  {
+    if (empty($this->options)) {
+      $this->options = $this->get_options();
+    }
+
+    if (!isset($this->options[$module])) {
+      $this->options[$module] = [];
+    }
+    $this->options[$module][$key] = $value;
+
+    return update_option('wp_plugin_boilerplate_options', $this->options);
+  }
+
+  /**
+   * Deletes a specific module option
+   * @param string $module
+   * @param string $id
+   * @return void
+   * @since 1.0.0
+   */
+  public function delete_option($module, $id)
+  {
+    if (empty($this->options)) {
+      $this->options = $this->get_options();
+    }
+    if (isset($this->options[$module][$id])) {
+      unset($this->options[$module][$id]);
+      update_option('wp_plugin_boilerplate_options', $this->options);
+    }
+  }
+
+  /**
+   * Deletes all module options
+   * @param string $module
+   * @return void
+   * @since 1.0.0
+   */
+  public function delete_module_options($module)
+  {
+    if (empty($this->options)) {
+      $this->options = $this->get_options();
+    }
+    if (isset($this->options[$module])) {
+      unset($this->options[$module]);
+      update_option('wp_plugin_boilerplate_options', $this->options);
+    }
+  }
+
+  /**
+   * Gets default options from all modules
+   * @return array
+   * @since 1.0.0
+   */
+  public function get_defaults()
+  {
+    return Module::get_all_default_options();
+  }
+
+  /**
+   * Gets all registered modules with their metadata
+   * @return array
+   * @since 1.0.0
+   */
+  public function get_modules()
+  {
+    $modules = Module::get_all_modules();
+    $module_data = [];
+
+    foreach ($modules as $slug => $instance) {
+      if (\is_object($instance)) {
+        $module_data[$slug] = [
+          'enabled' => $this->get_option($slug, 'enabled') ?: $instance->is_enabled(),
+          'name' => $instance->get_name(),
+          'version' => $instance->get_version(),
+          'slug' => $instance->get_slug(),
+          'description' => $instance->get_description(),
+          'default_options' => $instance->get_default_options(),
+          'options' => $this->get_module_options($slug) ?: $instance->get_default_options(),
+          'instance' => $instance
+        ];
+      } else {
+        error_log("WPPluginBoilerplate: Invalid module instance for slug: {$slug}");
+      }
+    }
+
+    return $module_data;
+  }
+
+  /**
+   * Gets module info for the React admin app
+   * @return array
+   * @since 1.0.0
+   */
+  public function get_modules_info(): array
+  {
+    $modules = Module::get_all_modules();
+    $modules_info = [];
+
+    foreach ($modules as $slug => $module) {
+      $modules_info[$slug] = [
+        'slug' => $slug,
+        'name' => $module->get_name(),
+        'description' => $module->get_description(),
+        'author' => $module->get_author(),
+        'version' => $module->get_version(),
+        'enabled' => $this->is_module_enabled($slug),
+        'options' => $module->get_options(),
+        'admin_settings' => $module->admin_settings()
+      ];
+    }
+
+    return $modules_info;
+  }
+
+  /**
+   * Checks if a module is enabled
+   * @param string $module_slug
+   * @return bool
+   * @since 1.0.0
+   */
+  public function is_module_enabled(string $module_slug): bool
+  {
+    $options = $this->get_module_options($module_slug);
+    return isset($options['enabled']) && $options['enabled'] === true;
+  }
+}
